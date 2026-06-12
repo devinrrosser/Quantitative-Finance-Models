@@ -3,7 +3,7 @@ from scipy.optimize import linprog
 
 print("--- Initializing Supply Chain Optimization Engine ---\n")
 
-# 1. Define Network Parameters
+# Network Parameters
 # Factories: Chicago, Dallas
 supply_capacities = [500, 700] 
 
@@ -11,7 +11,6 @@ supply_capacities = [500, 700]
 demand_requirements = [400, 400, 300]
 
 # Cost Matrix (Rows = Factories, Columns = Warehouses)
-# Example: Cost from Chicago (Row 0) to New York (Col 0) is $2 per unit.
 cost_matrix = [
     [2, 4, 7],  # Chicago to [NY, ATL, LA]
     [5, 3, 4]   # Dallas to [NY, ATL, LA]
@@ -20,7 +19,7 @@ cost_matrix = [
 # Flatten the cost matrix into a 1D vector for the solver
 c = np.array(cost_matrix).flatten()
 
-# 2. Setup Inequality Constraints (Supply cannot exceed capacities)
+# Setup Inequality Constraints (Supply cannot exceed capacities)
 # x0+x1+x2 <= 500 (Chicago Supply)
 # x3+x4+x5 <= 700 (Dallas Supply)
 A_ub = [
@@ -29,7 +28,7 @@ A_ub = [
 ]
 b_ub = supply_capacities
 
-# 3. Setup Equality Constraints (Demand must match requirements exactly)
+# Setup Equality Constraints (Demand must match requirements exactly)
 # x0 + x3 = 400 (New York Demand)
 # x1 + x4 = 400 (Atlanta Demand)
 # x2 + x5 = 300 (Los Angeles Demand)
@@ -40,12 +39,12 @@ A_eq = [
 ]
 b_eq = demand_requirements
 
-# 4. Run the Optimization Bounds (Routes cannot have negative shipments)
+# Run the Optimization Bounds 
 bounds = [(0, None) for _ in range(len(c))]
 
 res = linprog(c, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq, bounds=bounds, method='highs')
 
-# 5. Display the Operational Output
+# Display the Operational Output
 if res.success:
     optimal_routes = res.x.reshape(2, 3)
     print(f"Optimization Successful. Minimum Logistics Cost: ${res.fun:,.2f}\n")
