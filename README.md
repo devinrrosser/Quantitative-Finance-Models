@@ -1,5 +1,4 @@
-Markdown
-# Quantitative Finance & Operations Strategy Models
+Finance & Operations Strategy Models
 
 This repository contains a suite of Python-based quantitative models built to automate financial valuation, deal screening, and supply chain logistics. 
 
