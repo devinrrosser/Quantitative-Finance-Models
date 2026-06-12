@@ -14,6 +14,3 @@ A linear programming optimization model utilizing `scipy.optimize` to solve mult
 ## 3. Macro-Reshoring Portfolio Screener (`etf_script.py`)
 A theoretical factor-weighted portfolio model tracking macro-reshoring trends and domestic manufacturing leaders.
 * **Business Use Case:** Replaces standard market-cap weighting with a dynamic Capital Expenditure (CapEx) factor screen, tilting allocations heavily toward industrial companies building physical infrastructure.
-
----
-*Developed by Devin Rosser | University of Rochester*
