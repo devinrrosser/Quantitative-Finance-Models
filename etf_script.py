@@ -3,8 +3,8 @@ print("--- SCRIPT INITIALIZED ---")
 import yfinance as yf
 from yfinance import EquityQuery
 
-# 1. Build the "All-American" Screen
-# This filters for US-based companies in the Industrials sector
+# American Screen
+# Filters for US-based companies in the Industrials sector
 q = EquityQuery('and', [
     EquityQuery('eq', ['region', 'us']),
     EquityQuery('eq', ['sector', 'Industrials'])
@@ -12,19 +12,19 @@ q = EquityQuery('and', [
 
 print("Scanning for the Top 20 US Reshoring Leaders...")
 
-# 2. Execute the Screen
-# We sort by market cap (descending) to get the "Blue Chip" leaders first
+# Screen
+# Market cap descending to get the Blue Chip leaders first
 response = yf.screen(q, sortField='intradaymarketcap', sortAsc=False)
 tickers = [quote['symbol'] for quote in response['quotes'][:20]]
 
 portfolio_value = 10000
 capex_results = {}
 
-# 3. Pull CapEx Data
+# CapEx Data
 for ticker in tickers:
     try:
         stock = yf.Ticker(ticker)
-        # Using TTM (Trailing Twelve Months) for the most current '26 data
+        # Using Trailing Twelve Months for the most current 2026 data
         cf = stock.cashflow
         if 'Capital Expenditure' in cf.index:
             # Normalize to positive absolute value
@@ -33,7 +33,7 @@ for ticker in tickers:
     except Exception:
         continue
 
-# 4. Sorting & Allocation Logic
+# Sorting & Allocation Logic
 sorted_capex = dict(sorted(capex_results.items(), key=lambda item: item[1], reverse=True))
 total_capex = sum(sorted_capex.values())
 
