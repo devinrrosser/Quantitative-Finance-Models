@@ -6,7 +6,7 @@ def run_lbo_screen(ticker_symbol, target_irr=0.20):
     try:
         ticker = yf.Ticker(ticker_symbol)
         
-        # 1. Fetch Trailing Financials
+        # Trailing Financials
         financials = ticker.financials
         balance_sheet = ticker.balance_sheet
         
@@ -25,7 +25,7 @@ def run_lbo_screen(ticker_symbol, target_irr=0.20):
         fcf_conversion = 0.50  # 50% of EBITDA goes to paying down debt
         interest_rate = 0.07   # 7% interest on debt
         
-        # 2. Setup Transaction
+        # Setup Transaction
         purchase_price = enterprise_value
         entry_debt = purchase_price * leverage_ratio
         sponsor_equity = purchase_price - entry_debt
@@ -33,7 +33,7 @@ def run_lbo_screen(ticker_symbol, target_irr=0.20):
         print(f"Entry Enterprise Value: ${purchase_price/1e9:.2f}Bn (Multiple: {entry_multiple:.1f}x)")
         print(f"Sponsor Equity Check:   ${sponsor_equity/1e9:.2f}Bn | Debt: ${entry_debt/1e9:.2f}Bn")
         
-        # 3. 5-Year Projection Loop
+        # 5-Year Projection Loop
         current_ebitda = ebitda
         current_debt = entry_debt
         
@@ -42,14 +42,14 @@ def run_lbo_screen(ticker_symbol, target_irr=0.20):
             interest_expense = current_debt * interest_rate
             free_cash_flow = (current_ebitda * fcf_conversion) - interest_expense
             
-            # Pay down debt (cannot go below 0)
+            # Pay down debt
             current_debt = max(0, current_debt - free_cash_flow)
             
-        # 4. Exit Valuation (Assuming multiple expansion/contraction matches entry)
+        # Exit Valuation (Assuming multiple expansion/contraction matches entry)
         exit_ev = current_ebitda * entry_multiple
         exit_equity = exit_ev - current_debt
         
-        # 5. Calculate Metrics
+        # Calculate Metrics
         moic = exit_equity / sponsor_equity
         irr = (moic ** (1/5)) - 1
         
